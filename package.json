@@ -1,0 +1,22 @@
+{
+  "name": "pf-back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "grupo 19",
+  "license": "ISC",
+  "description": "pf Henry grupo 19 cohorte-40A",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JulianaCelis/backPF.git"
+  },
+  "keywords": [
+    "pf"
+  ],
+  "bugs": {
+    "url": "https://github.com/JulianaCelis/backPF/issues"
+  },
+  "homepage": "https://github.com/JulianaCelis/backPF#readme"
+}
