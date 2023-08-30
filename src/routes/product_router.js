@@ -1,15 +1,25 @@
 const express = require('express');
-const router = express.Router();
-const productsController = require('../controllers/index');
+const productRouter = express.Router();
+const {getProduct, createProduct} = require('../controllers/index');
 
-// Ruta para obtener la lista de productos
-router.get('/products', async (req, res) => {
+
+productRouter.get('/', async (req, res) => {
   try {
-    const products = await productsController.getProducts();
+    const products = await getProduct();
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener la lista de productos' });
   }
 });
 
-module.exports = router;
+
+productRouter.post('/', async (req, res) => {
+  try {
+    const newProduct = await createProduct(req.body);
+    res.status(201).json(newProduct);
+  } catch (error) {
+    res.status(400).json({ error: 'Error al crear el producto' });
+  }
+});
+
+module.exports = productRouter;

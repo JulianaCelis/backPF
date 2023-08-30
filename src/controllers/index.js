@@ -1,7 +1,9 @@
-const getProducts = require('./product_controller')
-const getUsers = require('./product_controller')
+const getProduct = require('./get_product')
+const getUser = require('./get_user')
+const createProduct = require('./create_product')
 
 module.exports = {
-    getProducts,
-    getUsers
+    getProduct,
+    getUser,
+    createProduct
 }
