@@ -1,6 +1,6 @@
 const { User } = require('../db.js');
 
-async function getUser(req, res) {
+async function getUsers(req, res) {
   try {
     const users = await User.findAll();
     res.json(users);
@@ -10,6 +10,5 @@ async function getUser(req, res) {
 }
 
 
-module.exports = {
-  getUser,
-};
+module.exports =  getUsers
+

@@ -18,6 +18,4 @@ async function createProduct(req, res) {
   }
 }
 
-module.exports = {
-  createProduct,
-};
+module.exports = createProduct
