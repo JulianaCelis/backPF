@@ -5,9 +5,13 @@ Este es el repositorio del backend para un E-Commerce de productos de cómputo. 
 Características Principales
 
 • Registro de usuarios con opciones de comprador y vendedor.
+
 • Gestión de productos, categorías y reseñas.
+
 • Asociación de direcciones de envío a usuarios.
+
 • Rutas API organizadas para interactuar con la aplicación.
+
 • Uso de validaciones para garantizar la integridad de los datos.
 
 
