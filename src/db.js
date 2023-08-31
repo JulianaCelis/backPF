@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Sequelize } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 
@@ -7,14 +7,12 @@ const {
   DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
 } = process.env;
 
-
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/ecommerce`, {
-  logging: false, // set to console.log to see the raw SQL queries
-  native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+  logging: false,
+  native: false,
 });
 
 const basename = path.basename(__filename);
-
 const modelDefiners = [];
 
 fs.readdirSync(path.join(__dirname, 'models'))
@@ -30,9 +28,7 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // Definición de asociaciones
-const { Products, User, Order, Category, Review } = sequelize.models;
-
-// console.log(sequelize.models, Products.findAll())
+const { Products, User, Order, Category, Review, ShippingAddress } = sequelize.models;
 
 // Asociaciones de Products y Category
 Products.belongsToMany(Category, { through: 'productCategory' });
@@ -42,16 +38,25 @@ Category.belongsToMany(Products, { through: 'productCategory' });
 Review.belongsTo(Products);
 Products.hasMany(Review);
 
+// Asociaciones de Review y User
+Review.belongsTo(User);
+User.hasMany(Review);
+
 // Asociaciones de Order y User
 Order.belongsTo(User);
 User.hasMany(Order);
 
-//Cart
+// Asociaciones de Product y User para usuarios que pueden subir productos
+User.hasMany(Products, { as: 'uploadedProducts' });
 
+// Asociaciones de Product y User para el carrito de compras
 Products.belongsToMany(User, { through: 'cartItem' });
 User.belongsToMany(Products, { through: 'cartItem' });
 
+// Asociaciones de User y ShippingAddress
+User.hasMany(ShippingAddress, { as: 'shippingAddresses' });
+
 module.exports = {
   ...sequelize.models,
-  conn: sequelize,     
+  conn: sequelize,
 };
