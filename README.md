@@ -16,9 +16,13 @@ Características Principales
 
 
 Tecnologías Utilizadas
+
 • Node.js
+
 • Express.js
+
 • Sequelize (ORM para PostgreSQL)
+
 • PostgreSQL (Base de Datos)
 
 JSON Web Tokens (JWT) para autenticación y seguridad
@@ -32,7 +36,6 @@ Configura las variables de entorno en un archivo .env
 5. Configura las credenciales de la base de datos en el archivo .env.
 
 Uso
-
 1. Ejecuta el servidor: npm start
 2. Accede a las rutas API a través de http://localhost:PUERTO/api/...
 
