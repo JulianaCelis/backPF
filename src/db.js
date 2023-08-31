@@ -7,7 +7,6 @@ const {
   DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
 } = process.env;
 
-console.log(DB_HOST);
 
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/ecommerce`, {
   logging: false, // set to console.log to see the raw SQL queries
@@ -31,15 +30,17 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // Definición de asociaciones
-const { Product, User, Order, Category, Review } = sequelize.models;
+const { Products, User, Order, Category, Review } = sequelize.models;
 
-// Asociaciones de Product y Category
-Product.belongsToMany(Category, { through: 'ProductCategory' });
-Category.belongsToMany(Product, { through: 'ProductCategory' });
+// console.log(sequelize.models, Products.findAll())
+
+// Asociaciones de Products y Category
+Products.belongsToMany(Category, { through: 'productCategory' });
+Category.belongsToMany(Products, { through: 'productCategory' });
 
 // Asociaciones de Review y Product
-Review.belongsTo(Product);
-Product.hasMany(Review);
+Review.belongsTo(Products);
+Products.hasMany(Review);
 
 // Asociaciones de Order y User
 Order.belongsTo(User);
@@ -47,8 +48,8 @@ User.hasMany(Order);
 
 //Cart
 
-Product.belongsToMany(User, { through: 'CartItem' });
-User.belongsToMany(Product, { through: 'CartItem' });
+Products.belongsToMany(User, { through: 'cartItem' });
+User.belongsToMany(Products, { through: 'cartItem' });
 
 module.exports = {
   ...sequelize.models,

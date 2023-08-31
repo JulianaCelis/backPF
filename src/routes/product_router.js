@@ -19,7 +19,7 @@ productRouter.post('/', async (req, res) => {
     const newProduct = await createProduct(req.body);
     res.status(201).json(newProduct);
   } catch (error) {
-    console.error(error);
+    
     res.status(400).json({ error: 'Error al crear el producto' });
   }
 });

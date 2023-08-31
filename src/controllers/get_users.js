@@ -1,14 +1,12 @@
 const { User } = require('../db.js');
 
-async function getUsers(req, res) {
+async function getUsers() {
   try {
     const users = await User.findAll();
-    res.json(users);
+    return users;
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener la lista de usuarios' });
+    return { error: 'Error al obtener la lista de usuarios' };
   }
 }
 
-
-module.exports =  getUsers
-
+module.exports = getUsers;
