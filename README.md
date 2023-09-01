@@ -37,7 +37,7 @@ Configura las variables de entorno en un archivo .env
   
 Uso
 1. Ejecuta el servidor: npm start
-2. Accede a las rutas API a través de http://localhost:PUERTO/api/...
+2. Accede a las rutas API a través de http://localhost:PUERTO/...
   
 Rutas API
   
