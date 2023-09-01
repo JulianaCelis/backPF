@@ -1,5 +1,4 @@
 const { DataTypes, Op } = require('sequelize');
-const { check } = require('express-validator');
 
 module.exports = (sequelize) => {
   const ShippingAddress = sequelize.define('shippingAddress', {
@@ -20,7 +19,7 @@ module.exports = (sequelize) => {
     },
     addressLine2: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         notEmpty: {
           msg: 'La dirección es obligatoria.',
@@ -38,7 +37,7 @@ module.exports = (sequelize) => {
     },
     postalCode: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     country: {
       type: DataTypes.STRING,

@@ -1,4 +1,5 @@
 const { User, ShippingAddress } = require('../db');
+const bcrypt = require('bcrypt');
 
 async function registerUser(req, res) {
   try {
@@ -13,20 +14,25 @@ async function registerUser(req, res) {
       return res.status(400).json({ error: 'Todos los campos de dirección son obligatorios.' });
     }
 
-    // Crear el usuario
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newShippingAddress = await ShippingAddress.create({
+      addressLine1: addressData.addressLine1,
+      addressLine2: addressData.addressLine2,
+      city: addressData.city,
+      postalCode: addressData.postalCode,
+      country: addressData.country,
+    });
+
     const newUser = await User.create({
       username,
       email,
-      password,
+      password: hashedPassword, 
       isSeller,
       wantsNotification,
     });
 
-    // Crear la dirección de envío asociada
-    const newShippingAddress = await ShippingAddress.create({
-      ...addressData,
-      userId: newUser.id, // Asociar la dirección con el usuario
-    });
+    await newUser.addShippingAddresses(newShippingAddress);
 
     return res.status(201).json({ message: 'Usuario registrado exitosamente' });
   } catch (error) {
@@ -35,6 +41,4 @@ async function registerUser(req, res) {
   }
 }
 
-module.exports = {
-  registerUser,
-};
+module.exports = registerUser;

@@ -30,9 +30,9 @@ sequelize.models = Object.fromEntries(capsEntries);
 // Definición de asociaciones
 const { Products, User, Order, Category, Review, ShippingAddress } = sequelize.models;
 
-// Asociaciones de Products y Category
-Products.belongsToMany(Category, { through: 'productCategory' });
-Category.belongsToMany(Products, { through: 'productCategory' });
+// // Asociaciones de Products y Category
+Products.belongsToMany(Category, { through: 'ProductCategory' });
+Category.belongsToMany(Products, { through: 'ProductCategory' });
 
 // Asociaciones de Review y Product
 Review.belongsTo(Products);
@@ -47,14 +47,20 @@ Order.belongsTo(User);
 User.hasMany(Order);
 
 // Asociaciones de Product y User para usuarios que pueden subir productos
-User.hasMany(Products, { as: 'uploadedProducts' });
+User.hasMany(Products, {
+  as: 'UploadedProducts',
+  foreignKey: 'id', 
+});
 
 // Asociaciones de Product y User para el carrito de compras
-Products.belongsToMany(User, { through: 'cartItem' });
-User.belongsToMany(Products, { through: 'cartItem' });
+Products.belongsToMany(User, { through: 'CartItem' });
+User.belongsToMany(Products, { through: 'CartItem' });
 
 // Asociaciones de User y ShippingAddress
-User.hasMany(ShippingAddress, { as: 'shippingAddresses' });
+User.hasMany(ShippingAddress, {
+  as: 'shippingAddresses',
+  foreignKey: 'id', 
+});
 
 module.exports = {
   ...sequelize.models,
