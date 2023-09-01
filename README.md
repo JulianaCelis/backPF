@@ -41,12 +41,12 @@ Uso
   
 Rutas API
   
-/api/users/register: Registro de usuarios.
+/users/register: Registro de usuarios.
   
-/api/products: Gestión de productos.
+/products: Gestión de productos.
   
-/api/categories: Gestión de categorías.
+/categories: Gestión de categorías.
   
-/api/reviews: Gestión de reseñas.
+/reviews: Gestión de reseñas.
   
-/api/shipping-addresses: Gestión de direcciones de envío.
+/shipping-addresses: Gestión de direcciones de envío.
