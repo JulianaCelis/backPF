@@ -27,7 +27,7 @@ let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-// Definición de asociaciones
+
 const { Products, User, Order, Category, Review, ShippingAddress } = sequelize.models;
 
 // // Asociaciones de Products y Category
@@ -40,10 +40,12 @@ Products.hasMany(Review);
 
 // Asociaciones de Review y User
 Review.belongsTo(User);
+//agregar foreignKey
 User.hasMany(Review);
 
 // Asociaciones de Order y User
 Order.belongsTo(User);
+//agregar foreignKey
 User.hasMany(Order);
 
 // Asociaciones de Product y User para usuarios que pueden subir productos
