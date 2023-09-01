@@ -42,11 +42,11 @@ Uso
 Rutas API
   
 /users/register: Registro de usuarios.
+
+/users/login: Inicio de sesión de usuarios.
   
 /products: Gestión de productos.
   
 /categories: Gestión de categorías.
   
 /reviews: Gestión de reseñas.
-  
-/shipping-addresses: Gestión de direcciones de envío.
