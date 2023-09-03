@@ -1,16 +1,15 @@
-const { Product } = require('../db.js');
+const { Products } = require('../db.js');
 
-async function getProducts(req, res) {
+async function getProducts() {
   try {
-    const products = await Product.findAll();
+    const products = await Products.findAll();
     if (products.length === 0) {
-      res.status(404).json({ message: 'No se encontraron productos' });
-    } else {
-      res.json(products);
+      return { message: 'No se encontraron productos' };
     }
+    return products;
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al obtener la lista de productos' });
+    return { error: 'Error al obtener la lista de productos' };
   }
 }
 
