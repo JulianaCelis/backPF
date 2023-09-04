@@ -31,8 +31,8 @@ sequelize.models = Object.fromEntries(capsEntries);
 const { Products, User, Order, Category, Review, ShippingAddress } = sequelize.models;
 
 // // Asociaciones de Products y Category
-Products.belongsToMany(Category, { through: 'ProductCategory' });
-Category.belongsToMany(Products, { through: 'ProductCategory' });
+// Products.belongsToMany(Category, { through: 'ProductCategory' });
+// Category.belongsToMany(Products, { through: 'ProductCategory' });
 
 // Asociaciones de Review y Product
 Review.belongsTo(Products);
