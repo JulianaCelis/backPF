@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Sequelize } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 
@@ -7,15 +7,12 @@ const {
   DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
 } = process.env;
 
-console.log(DB_HOST);
-
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/ecommerce`, {
-  logging: false, // set to console.log to see the raw SQL queries
-  native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+  logging: false,
+  native: false,
 });
 
 const basename = path.basename(__filename);
-
 const modelDefiners = [];
 
 fs.readdirSync(path.join(__dirname, 'models'))
@@ -30,27 +27,44 @@ let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-// Definición de asociaciones
-const { Product, User, Order, Category, Review } = sequelize.models;
 
-// Asociaciones de Product y Category
-Product.belongsToMany(Category, { through: 'ProductCategory' });
-Category.belongsToMany(Product, { through: 'ProductCategory' });
+const { Products, User, Order, Category, Review, ShippingAddress } = sequelize.models;
+
+// // Asociaciones de Products y Category
+// Products.belongsToMany(Category, { through: 'ProductCategory' });
+// Category.belongsToMany(Products, { through: 'ProductCategory' });
 
 // Asociaciones de Review y Product
-Review.belongsTo(Product);
-Product.hasMany(Review);
+Review.belongsTo(Products);
+Products.hasMany(Review);
+
+// Asociaciones de Review y User
+Review.belongsTo(User);
+//agregar foreignKey
+User.hasMany(Review);
 
 // Asociaciones de Order y User
 Order.belongsTo(User);
+//agregar foreignKey
 User.hasMany(Order);
 
-//Cart
+// Asociaciones de Product y User para usuarios que pueden subir productos
+User.hasMany(Products, {
+  as: 'UploadedProducts',
+  foreignKey: 'id', 
+});
 
-Product.belongsToMany(User, { through: 'CartItem' });
-User.belongsToMany(Product, { through: 'CartItem' });
+// Asociaciones de Product y User para el carrito de compras
+Products.belongsToMany(User, { through: 'CartItem' });
+User.belongsToMany(Products, { through: 'CartItem' });
+
+// Asociaciones de User y ShippingAddress
+User.hasMany(ShippingAddress, {
+  as: 'shippingAddresses',
+  foreignKey: 'id', 
+});
 
 module.exports = {
   ...sequelize.models,
-  conn: sequelize,     
+  conn: sequelize,
 };

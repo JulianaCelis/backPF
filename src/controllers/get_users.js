@@ -1,14 +1,18 @@
-const { User } = require('../db.js');
+const { User, ShippingAddress } = require('../db.js');
 
-async function getUsers(req, res) {
+async function getUsers() {
   try {
-    const users = await User.findAll();
-    res.json(users);
+    const users = await User.findAll({
+      include: {
+        model: ShippingAddress,
+        as: 'shippingAddresses', 
+        required: false, 
+      },
+    });
+    return users;
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener la lista de usuarios' });
+    throw new Error('Error al obtener la lista de usuarios');
   }
 }
 
-
-module.exports =  getUsers
-
+module.exports = getUsers;

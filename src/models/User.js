@@ -25,7 +25,11 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    isAdmin: {
+    wantsNotifications: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+    isSeller: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
@@ -33,9 +37,9 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        isAdminStore(value) {
-          if (this.isAdmin && !value) {
-            throw new Error('El nombre de la tienda es obligatorio para administradores');
+        isSellerStore(value) {
+          if (this.isSeller && !value) {
+            throw new Error('El nombre de la tienda es obligatorio para vendedores');
           }
         },
       },

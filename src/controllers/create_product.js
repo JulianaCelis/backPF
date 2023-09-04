@@ -1,10 +1,10 @@
-const { Product } = require('../db.js');
+const { Products } = require('../db.js');
 
 async function createProduct(req, res) {
   try {
     const { title, image, summary, price, stock } = req.body;
 
-    const newProduct = await Product.create({
+    const newProduct = await Products.create({
       title,
       image,
       summary,
@@ -12,10 +12,13 @@ async function createProduct(req, res) {
       stock,
     });
 
-    res.status(201).json(newProduct);
+    return res.status(201).json(newProduct); 
   } catch (error) {
-    res.status(400).json({ error: 'Error al crear el producto' });
+    console.error('Error al crear el producto:', error);
+    res.status(500).json({ error: 'Error al crear el producto' }); 
   }
 }
 
-module.exports = createProduct
+module.exports = createProduct;
+
+
