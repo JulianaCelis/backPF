@@ -28,11 +28,14 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 
-const { Products, User, Order, Category, Review, ShippingAddress } = sequelize.models;
+const { Products, User, Order, Category, Review, ShippingAddress, Subcategory} = sequelize.models;
 
 // // Asociaciones de Products y Category
 // Products.belongsToMany(Category, { through: 'ProductCategory' });
 // Category.belongsToMany(Products, { through: 'ProductCategory' });
+
+Category.hasMany(Subcategory, { foreignKey: 'categoryId', as: 'subcategories' });
+Subcategory.belongsTo(Category, { foreignKey: 'categoryId' });
 
 // Asociaciones de Review y Product
 Review.belongsTo(Products);
@@ -61,7 +64,7 @@ User.belongsToMany(Products, { through: 'CartItem' });
 // Asociaciones de User y ShippingAddress
 User.hasMany(ShippingAddress, {
   as: 'shippingAddresses',
-  foreignKey: 'id', 
+  foreignKey: 'userId', // Cambiar 'id' a 'userId'
 });
 
 module.exports = {

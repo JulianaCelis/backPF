@@ -1,7 +1,11 @@
 require('dotenv').config();
 const express = require('express');
+const cookieParser = require('cookie-parser'); 
 const app = express();
 app.use(express.json());
+
+// Configura cookie-parser como middleware
+app.use(cookieParser());
 
 const server = require('./src/app.js');
 const { conn: sequelizeConnection } = require('./src/db.js');

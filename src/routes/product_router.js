@@ -1,6 +1,7 @@
 const express = require('express');
 const productRouter = express.Router();
 const {getProducts, createProduct} = require('../controllers/index');
+const authenticateToken = require('../middlewares/authMiddleware');
 
 
 productRouter.get('/', async (req, res) => {
@@ -14,6 +15,6 @@ productRouter.get('/', async (req, res) => {
 });
 
 
-productRouter.post('/', createProduct);
+productRouter.post('/', authenticateToken, createProduct);
 
 module.exports = productRouter;

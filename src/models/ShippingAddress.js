@@ -1,4 +1,4 @@
-const { DataTypes} = require('sequelize');
+const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
   const ShippingAddress = sequelize.define('shippingAddress', {
@@ -47,6 +47,10 @@ module.exports = (sequelize) => {
           msg: 'El país es obligatorio.',
         },
       },
+    },
+    userId: {
+      type: DataTypes.UUID, // Asegúrate de que coincida con el tipo de datos en la tabla User
+      allowNull: false, // O cualquier otra restricción que necesites
     },
   });
 
