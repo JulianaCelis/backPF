@@ -48,6 +48,10 @@ module.exports = (sequelize) => {
         },
       },
     },
+    userId: {
+      type: DataTypes.UUID, // Asegúrate de que coincida con el tipo de datos en la tabla User
+      allowNull: false, // O cualquier otra restricción que necesites
+    },
   });
 
   return ShippingAddress;

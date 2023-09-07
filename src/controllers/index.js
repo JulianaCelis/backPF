@@ -9,5 +9,5 @@ module.exports = {
     getUsers,
     createProduct,
     registerUser,
-    loginUser
+    loginUser,
 }

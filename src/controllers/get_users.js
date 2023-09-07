@@ -5,8 +5,8 @@ async function getUsers() {
     const users = await User.findAll({
       include: {
         model: ShippingAddress,
-        as: 'shippingAddresses', // Asegúrate de que coincida con el alias definido en las asociaciones
-        required: false, // Esto permite que los usuarios sin direcciones de envío también se incluyan
+        as: 'shippingAddresses', 
+        required: false, 
       },
     });
     return users;
