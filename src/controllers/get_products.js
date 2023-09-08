@@ -1,11 +1,15 @@
-const { Products } = require('../db.js');
+const { Products, Category, Subcategory } = require('../db.js');
 
 async function getProducts() {
   try {
-    const products = await Products.findAll();
+    const products = await Products.findAll({
+      include: [Category, Subcategory], 
+    });
+
     if (products.length === 0) {
       return { message: 'No se encontraron productos' };
     }
+
     return products;
   } catch (error) {
     console.error(error);
@@ -14,3 +18,4 @@ async function getProducts() {
 }
 
 module.exports = getProducts;
+

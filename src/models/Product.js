@@ -4,6 +4,12 @@ module.exports = (sequelize) => {
   sequelize.define(
     'products',
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false,
+      },
       title: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -49,6 +55,10 @@ module.exports = (sequelize) => {
             msg: 'El stock debe ser mayor o igual a 0.',
           },
         },
+      },
+      images: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
       },
     },
   );
