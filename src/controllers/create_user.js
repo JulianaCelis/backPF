@@ -5,7 +5,7 @@ require('dotenv').config();
 
 async function registerUser(req, res) {
   try {
-    const { username, email, password, addressData, isSeller, wantsNotification } = req.body;
+    const { username, email, password, addressData, isSeller, wantsNotification, storeName } = req.body;
 
     if (!addressData || 
         !addressData.addressLine1 || 
@@ -30,9 +30,15 @@ async function registerUser(req, res) {
       password: hashedPassword, 
       isSeller,
       wantsNotification,
+      storeName: isSeller ? storeName : null,
     });
 
-    const token = jwt.sign({ userId: newUser.id }, process.env.SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign(
+      { userId: newUser.id, isSeller: isSeller }, // Agrega isSeller al payload
+      process.env.SECRET_KEY,
+      { expiresIn: '1h' }
+    );
+  
 
     const newShippingAddress = await ShippingAddress.create({
       addressLine1: addressData.addressLine1,

@@ -1,6 +1,6 @@
 const Review = require('../models/Review');
 
-async function createReview(product, user, comment) {
+async function createReview(product, user, comment, rating) {
   try {
     await Review.create({
       product,
