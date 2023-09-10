@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  const Category = sequelize.define('Category', {
+  const Subcategory = sequelize.define('Subcategory', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -14,5 +14,12 @@ module.exports = (sequelize) => {
     },
   });
 
-  return Category;
+  Subcategory.associate = (models) => {
+    Subcategory.belongsTo(models.Category, {
+      foreignKey: 'categoryId',
+      allowNull: false,
+    });
+  };
+
+  return Subcategory;
 };
