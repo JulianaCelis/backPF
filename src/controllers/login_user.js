@@ -1,11 +1,24 @@
 const { User } = require('../db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-require('dotenv').config(); 
+require('dotenv').config();
+const axios = require('axios');
 
 async function loginUser(req, res) {
   try {
-    const { email, password, rememberMe } = req.body;
+    const { email, password, rememberMe, googleCode } = req.body;
+   
+    if (googleCode) {
+      const googleTokenResponse = await exchangeGoogleCodeForToken(googleCode);
+      const googleProfile = await fetchGoogleUserProfile(googleTokenResponse.access_token);
+
+      const existingUser = await User.findOne({ where: { googleId: googleProfile.id } });
+
+      if (existingUser) {
+        const token = jwt.sign({ userId: existingUser.id }, process.env.SECRET_KEY, { expiresIn: '1h' });
+        return res.status(200).json({ message: 'Inicio de sesión exitoso', token });
+      }
+    }
 
     const user = await User.findOne({
       where: {
@@ -23,12 +36,11 @@ async function loginUser(req, res) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
-    const expiresIn = rememberMe ? '7d' : '1h'; 
+    const expiresIn = rememberMe ? '7d' : '1h';
     const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY, { expiresIn });
 
-
     if (rememberMe) {
-      res.cookie('accessToken', token, { maxAge: 604800000, httpOnly: true, secure: true }); 
+      res.cookie('accessToken', token, { maxAge: 604800000, httpOnly: true, secure: true });
     }
 
     return res.status(200).json({ message: 'Inicio de sesión exitoso', token });
@@ -36,6 +48,28 @@ async function loginUser(req, res) {
     console.error('Error al iniciar sesión:', error);
     return res.status(500).json({ error: 'Error al iniciar sesión' });
   }
+}
+
+async function exchangeGoogleCodeForToken(googleCode) {
+  const googleTokenResponse = await axios.post('https://oauth2.googleapis.com/token', null, {
+    params: {
+      code: googleCode,
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+      grant_type: 'authorization_code',
+    },
+  });
+  return googleTokenResponse.data;
+}
+
+async function fetchGoogleUserProfile(accessToken) {
+  const googleProfileResponse = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return googleProfileResponse.data;
 }
 
 module.exports = loginUser;
