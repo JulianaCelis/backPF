@@ -30,4 +30,3 @@ module.exports = (sequelize) => {
   },
 });
 }
-module.exports = OrderItem;

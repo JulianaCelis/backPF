@@ -5,3 +5,6 @@ const {createPayment,paymentNotification,getPaymentDetails} = require('../contro
 paymentRouter.post('/', createPayment);
 paymentRouter.post('/notification', paymentNotification);
 paymentRouter.get('/:paymentId', getPaymentDetails);
+
+
+module.exports = paymentRouter

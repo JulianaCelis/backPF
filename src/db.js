@@ -78,16 +78,16 @@ User.hasMany(ShippingAddress, {
 });
 
 // Asociaciones de Order y OrderItem
-Order.hasMany(OrderItem, { foreignKey: 'orderId' });
-OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
+// Order.hasMany(OrderItem, { foreignKey: 'orderId' });
+// OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
 
-// Asociaciones de Product y OrderItem
-Products.hasMany(OrderItem, { foreignKey: 'productId' });
-OrderItem.belongsTo(Product, { foreignKey: 'productId' });
+// // Asociaciones de Product y OrderItem
+// Products.hasMany(OrderItem, { foreignKey: 'productId' });
+// OrderItem.belongsTo(Product, { foreignKey: 'productId' });
 
-// Asociaciones de Cart
-Cart.belongsTo(User, { foreignKey: 'userId' });
-Cart.belongsTo(Products, { foreignKey: 'productId' });
+// // Asociaciones de Cart
+// Cart.belongsTo(User, { foreignKey: 'userId' });
+// Cart.belongsTo(Products, { foreignKey: 'productId' });
 
 module.exports = {
   ...sequelize.models,

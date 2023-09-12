@@ -5,7 +5,19 @@ require('dotenv').config();
 
 async function registerUser(req, res) {
   try {
-    const { username, email, password, addressData, isSeller, wantsNotification, storeName } = req.body;
+    const { 
+      username, 
+      email, 
+      firstName, 
+      lastName, 
+      birthdate,
+      password, 
+      addressData,
+      isSeller, 
+      wantsNotification, 
+      storeName, 
+      googleProfile
+     } = req.body;
 
     if (!addressData || 
         !addressData.addressLine1 || 
@@ -24,21 +36,34 @@ async function registerUser(req, res) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+
     const newUser = await User.create({
       username,
       email,
+      firstName, 
+      lastName, 
+      birthdate,
       password: hashedPassword, 
       isSeller,
       wantsNotification,
       storeName: isSeller ? storeName : null,
     });
 
+
+    const tokenPayload = {
+      userId: newUser.id,
+      isSeller,
+    };
+
+    if (googleProfile) {
+      tokenPayload.googleProfile = googleProfile;
+    }
+
     const token = jwt.sign(
-      { userId: newUser.id, isSeller: isSeller }, // Agrega isSeller al payload
+      tokenPayload,
       process.env.SECRET_KEY,
       { expiresIn: '1h' }
     );
-  
 
     const newShippingAddress = await ShippingAddress.create({
       addressLine1: addressData.addressLine1,

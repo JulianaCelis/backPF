@@ -1,28 +1,7 @@
-require('dotenv').config();
-const express = require('express');
-const cookieParser = require('cookie-parser'); 
-const app = express();
-const server = require('./src/app.js');
-const passport = require('./src/handlers/passport');
-const session = require('express-session');
+const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const { User } = require('./src/db.js');
-const { conn: sequelizeConnection } = require('./src/db.js');
-const PORT = process.env.PORT || 3001;
+const { User } = require('../db');
 
-app.use(express.json());
-
-
-app.use(cookieParser());
-
-// Configura una sesión para Passport
-app.use(session({ secret: 'tu_secreto', resave: false, saveUninitialized: true }));
-
-// Inicializa Passport y utiliza sesiones para mantener la autenticación
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Configura la estrategia de Google
 passport.use(
   new GoogleStrategy(
     {
@@ -53,7 +32,6 @@ passport.use(
   )
 );
 
-// Serializa y deserializa el usuario
 passport.serializeUser((user, done) => {
   // Implementa la serialización de usuario según tus necesidades
   done(null, user.id);
@@ -69,21 +47,4 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-// ... (otras configuraciones de la aplicación)
-
-// Importa tus rutas de autenticación (por ejemplo, auth_router.js)
-const authRouter = require('./src/routes/google_router');
-
-// Usa las rutas de autenticación
-app.use('/auth', authRouter);
-//fin
-
-sequelizeConnection.sync({ force: false })
-  .then(() => {
-    server.listen(PORT, () => {
-      console.log(`Servidor escuchando en el puerto ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error('Error al sincronizar modelos:', error);
-  });
+module.exports = passport;

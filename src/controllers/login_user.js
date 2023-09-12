@@ -37,7 +37,7 @@ async function loginUser(req, res) {
     }
 
     const expiresIn = rememberMe ? '7d' : '1h';
-    const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY, { expiresIn });
+    const token = jwt.sign({ userId: user.id, isSeller: user.isSeller}, process.env.SECRET_KEY, { expiresIn });
 
     if (rememberMe) {
       res.cookie('accessToken', token, { maxAge: 604800000, httpOnly: true, secure: true });
