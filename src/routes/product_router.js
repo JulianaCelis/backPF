@@ -2,7 +2,8 @@ const express = require('express');
 const productRouter = express.Router();
 const {getProducts, createProduct, updateProduct, getProductById} = require('../controllers/index');
 const { Products } = require('../db.js');
-const authenticateToken = require('../middlewares/authMiddleware.js');
+const {renewAccessToken, authenticateToken} = require('../middlewares/authMiddleware.js');
+
 
 
 productRouter.get('/', async (req, res) => {
@@ -33,9 +34,9 @@ productRouter.get('/:productId', async (req, res) => {
 });
 
 
-productRouter.post('/', authenticateToken, createProduct);
+productRouter.post('/', renewAccessToken, authenticateToken, createProduct);
 
-productRouter.delete('/:productId', authenticateToken, async (req, res) => {
+productRouter.delete('/:productId', renewAccessToken, authenticateToken, async (req, res) => {
   try {
     const productId = req.params.productId;
     const userId = req.user.id; 
@@ -57,6 +58,6 @@ productRouter.delete('/:productId', authenticateToken, async (req, res) => {
   }
 });
 
-productRouter.put('/:productId', authenticateToken, updateProduct);
+productRouter.put('/:productId', renewAccessToken, authenticateToken, updateProduct);
 
 module.exports = productRouter;

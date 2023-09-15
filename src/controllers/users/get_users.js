@@ -1,4 +1,4 @@
-const { User, ShippingAddress } = require('../db.js');
+const { User, ShippingAddress } = require('../../db.js');
 
 async function getUsers() {
   try {

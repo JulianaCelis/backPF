@@ -1,4 +1,4 @@
-const { User } = require('../db');
+const { User } = require('../../db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -15,8 +15,10 @@ async function loginUser(req, res) {
       const existingUser = await User.findOne({ where: { googleId: googleProfile.id } });
 
       if (existingUser) {
-        const token = jwt.sign({ userId: existingUser.id }, process.env.SECRET_KEY, { expiresIn: '1h' });
-        return res.status(200).json({ message: 'Inicio de sesión exitoso', token });
+        const accessToken = jwt.sign({ userId: existingUser.id }, process.env.SECRET_KEY, { expiresIn: '1h' });
+        const refreshToken = jwt.sign({ userId: existingUser.id }, process.env.REFRESH_SECRET_KEY, { expiresIn: '7d' });
+
+        return res.status(200).json({ message: 'Inicio de sesión exitoso', accessToken, refreshToken });
       }
     }
 
@@ -37,13 +39,14 @@ async function loginUser(req, res) {
     }
 
     const expiresIn = rememberMe ? '7d' : '1h';
-    const token = jwt.sign({ userId: user.id, isSeller: user.isSeller}, process.env.SECRET_KEY, { expiresIn });
+    const accessToken = jwt.sign({ userId: user.id, isSeller: user.isSeller }, process.env.SECRET_KEY, { expiresIn });
+    const refreshToken = jwt.sign({ userId: user.id }, process.env.REFRESH_SECRET_KEY, { expiresIn: '7d' });
 
     if (rememberMe) {
-      res.cookie('accessToken', token, { maxAge: 604800000, httpOnly: true, secure: true });
+      res.cookie('accessToken', accessToken, { maxAge: 604800000, httpOnly: true, secure: true });
     }
 
-    return res.status(200).json({ message: 'Inicio de sesión exitoso', token });
+    return res.status(200).json({ message: 'Inicio de sesión exitoso', accessToken, refreshToken });
   } catch (error) {
     console.error('Error al iniciar sesión:', error);
     return res.status(500).json({ error: 'Error al iniciar sesión' });

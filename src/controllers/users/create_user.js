@@ -1,4 +1,4 @@
-const { User, ShippingAddress } = require('../db');
+const { User, ShippingAddress } = require('../../db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
