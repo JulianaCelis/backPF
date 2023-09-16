@@ -29,7 +29,8 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 
 
-const { Products, User, Order, Category, Review, ShippingAddress, Subcategory, OrderItem, Cart} = sequelize.models;
+const { Products, User, Order, Category, Reviews, ShippingAddress, Subcategory, OrderItem, Cart} = sequelize.models;
+
 
 // Relación entre Producto y Categoría (muchos a muchos)
 Products.belongsToMany(Category, { through: 'ProductCategory' });
@@ -44,13 +45,13 @@ Products.belongsToMany(Subcategory, { through: 'ProductSubcategory' });
 Subcategory.belongsToMany(Products, { through: 'ProductSubcategory' });
 
 // Asociaciones de Review y Product
-Review.belongsTo(Products, { foreignKey: 'productId' });
-Products.hasMany(Review, { foreignKey: 'productId' });
+Reviews.belongsTo(Products, { foreignKey: 'productId' });
+Products.hasMany(Reviews, { foreignKey: 'productId' });
 
 // Asociaciones de Review y User
 
-Review.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Review, { foreignKey: 'userId' });
+Reviews.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Reviews, { foreignKey: 'userId' });
 
 // Asociaciones de Order y User
 User.hasMany(Order, { foreignKey: 'userId' });
