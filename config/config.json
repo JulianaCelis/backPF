@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "postgres",
-    "password": "465546",
+    "password": "Oremonogatari.22",
     "database": "ecommerce",
     "host": "localhost",
     "dialect": "postgres"

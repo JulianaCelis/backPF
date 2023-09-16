@@ -1,4 +1,4 @@
-// seeders/xxxxxx-seed-categories.js
+
 
 'use strict';
 const { v4: uuidv4 } = require('uuid');
@@ -89,15 +89,13 @@ module.exports = {
     for (const categoryData of categoriesData) {
         const { name, subcategories } = categoryData;
   
-        // Generar un UUID para la categoría
         const categoryId = uuidv4();
   
-        // Crear categoría principal con UUID
         await queryInterface.bulkInsert(
           'Categories',
           [
             {
-              id: categoryId, // Asigna el UUID como "id"
+              id: categoryId, 
               name,
               createdAt: new Date(),
               updatedAt: new Date(),
@@ -106,14 +104,13 @@ module.exports = {
           { returning: true }
         );
   
-        // Crear subcategorías y establecer la relación con la categoría principal
         for (const subcategoryName of subcategories) {
-          const subcategoryId = uuidv4(); // Generar UUID para la subcategoría
+          const subcategoryId = uuidv4(); 
           await queryInterface.bulkInsert('Subcategories', [
             {
-              id: subcategoryId, // Asigna el UUID como "id"
+              id: subcategoryId, 
               name: subcategoryName,
-              categoryId: categoryId, // Utiliza el UUID de la categoría principal
+              categoryId: categoryId, 
               createdAt: new Date(),
               updatedAt: new Date(),
             },
