@@ -1,26 +1,29 @@
-const Review = require('../models/Review');
+const { Reviews } = require('../db.js');
 
-const updateReview = async (req, res) => {
-  const { id } = req.params;
+async function updateReview(req, res) {
+  const { id } = req.params; // Obtén el ID de la revisión de la URL
   const { comment, rating } = req.body;
 
   try {
-    const review = await Review.findByPk(id);
+    // Verifica si la revisión existe
+    const review = await Reviews.findByPk(id);
 
     if (!review) {
-      return res.status(404).json({ error: 'Reseña no encontrada.' });
+      return res.status(404).json({ error: 'Revisión no encontrada.' });
     }
 
-    // Actualizar los campos de la reseña
-    review.comment = comment;
-    review.rating = rating;
+    // Actualiza la revisión con los nuevos datos
+    await review.update({
+      comment,
+      rating,
+    });
 
-    await review.save();
-
-    return res.json(review);
+    console.log('Revisión actualizada con éxito.');
+    res.status(200).json({ message: 'Revisión actualizada con éxito.' });
   } catch (error) {
-    return res.status(500).json({ error: 'Error al actualizar la reseña.' });
+    console.error('Error al actualizar la revisión:', error);
+    res.status(500).json({ error: 'Error al actualizar la revisión.' });
   }
-};
+}
 
 module.exports = updateReview;
