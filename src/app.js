@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
 const axios = require('axios');
-const imageRoutes = require('./routes/imageRoutes');
+const imageRoutes = require('./routes/imageRoutes'); // cloudinary
 
 require('./db.js');
 
