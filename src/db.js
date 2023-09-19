@@ -31,7 +31,6 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 const { Products, User, Order, Category, Reviews, ShippingAddress, Subcategory, OrderItem, Cart} = sequelize.models;
 
-console.log(sequelize.models)
 
 
 // Relación entre Producto y Categoría (muchos a muchos)
