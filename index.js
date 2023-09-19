@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const cookieParser = require('cookie-parser'); 
 const app = express();
 const server = require('./src/app.js');
@@ -11,18 +12,34 @@ const { conn: sequelizeConnection } = require('./src/db.js');
 const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
-
-
 app.use(cookieParser());
 
-// Configura una sesión para Passport
-app.use(session({ secret: 'tu_secreto', resave: false, saveUninitialized: true }));
+app.use(
+  session({
+    secret: 'tu_secreto',
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
-// Inicializa Passport y utiliza sesiones para mantener la autenticación
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+// app.use(cors(corsOptions));
+
+app.use(cors());
+
+
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Configura la estrategia de Google
 passport.use(
   new GoogleStrategy(
     {
@@ -31,7 +48,6 @@ passport.use(
       callbackURL: process.env.GOOGLE_REDIRECT_URI,
     },
     async (accessToken, refreshToken, profile, done) => {
-      // Implementa la lógica para encontrar o crear un usuario en tu base de datos
       try {
         let user = await User.findOne({ where: { googleId: profile.id } });
 
@@ -40,12 +56,9 @@ passport.use(
           user = await User.create({
             googleId: profile.id,
             email: profile.emails[0].value,
-            // Otros campos de usuario según lo necesario
           });
         }
 
-        // Llama a done() con el usuario para autenticación exitosa
-        return done(null, user);
       } catch (error) {
         return done(error);
       }
@@ -53,14 +66,11 @@ passport.use(
   )
 );
 
-// Serializa y deserializa el usuario
 passport.serializeUser((user, done) => {
-  // Implementa la serialización de usuario según tus necesidades
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  // Implementa la deserialización de usuario según tus necesidades
   try {
     const user = await User.findByPk(id);
     done(null, user);
@@ -69,14 +79,23 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-// ... (otras configuraciones de la aplicación)
-
-// Importa tus rutas de autenticación (por ejemplo, auth_router.js)
 const authRouter = require('./src/routes/google_router');
 
-// Usa las rutas de autenticación
 app.use('/auth', authRouter);
-//fin
+
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({ message: 'Unauthorized' });
+  } else {
+    next(err);
+  }
+});
+
+// Manejo de errores global
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ message: 'Internal Server Error' });
+});
 
 sequelizeConnection.sync({ force: false })
   .then(() => {

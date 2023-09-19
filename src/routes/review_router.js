@@ -1,6 +1,7 @@
 const express = require('express');
 const ReviewRouter = express.Router();
 const {getAllReviews, getReviewsByProduct, createReview, updateReview,deleteReview,} = require ('../controllers/index');
+const {authenticateToken} = require('../middlewares/authMiddleware.js');
 
 
 ReviewRouter.get('/', async (req, res) => {
@@ -25,7 +26,7 @@ ReviewRouter.get('/', async (req, res) => {
     }
   });
   
-  ReviewRouter.post('/:id', createReview);
+  ReviewRouter.post('/:id', authenticateToken, createReview);
   ReviewRouter.put('/:id', updateReview);
 ReviewRouter.delete('/:id', deleteReview);
 

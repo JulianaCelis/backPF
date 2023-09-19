@@ -1,6 +1,7 @@
 const express = require('express');
 const userRouter = express.Router();
 const { getUsers, registerUser, loginUser, getUserById} = require('../controllers/index');
+const { authenticateToken } = require('../middlewares/authMiddleware.js');
 
 userRouter.get('/', async (req, res) => {
     try {
@@ -13,16 +14,18 @@ userRouter.get('/', async (req, res) => {
   });
   
   userRouter.get('/:userId', async (req, res) => {
-    try {
-      const userId = req.params.userId; // Obtén el ID del usuario desde los parámetros de la URL
-      const user = await getUserById(userId); // Llama a la función para obtener el usuario por ID
+    const userId = req.params.userId; 
   
+    try {
+
+      const user = await getUserById(userId);
       res.status(200).json(user);
     } catch (error) {
       console.error('Error al obtener el usuario:', error);
       res.status(500).json({ error: 'Error al obtener el usuario' });
     }
   });
+  
 
 userRouter.post('/register', registerUser);
 

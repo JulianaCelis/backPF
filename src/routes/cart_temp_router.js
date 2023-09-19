@@ -1,10 +1,11 @@
 const express = require('express');
 const CartTempRouter = express.Router();
-const {getCart, addToTempCart, removeFromTempCart} = require('../controllers/index');
+const { addToTempCart, removeFromTempCart} = require('../controllers/index');
+const { getCart } = require('../controllers/cartController/get_cart');
 
-CartTempRouter.get('/temp-cart', getCart);
+CartTempRouter.get('/', getCart);
 
-CartTempRouter.post('/temp-cart/add/:productId', addToTempCart);
+CartTempRouter.post('/add/:productId', addToTempCart);
 
 CartTempRouter.delete('/temp-cart/remove/:productId', removeFromTempCart);
 

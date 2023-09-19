@@ -9,19 +9,19 @@ module.exports = {
       for (const productData of productsData) {
         const { title, summary, price, stock, images, categoryIds, subcategoryIds } = productData;
 
-        // Crear el producto primero
+        const imagesArray = Array.isArray(images) ? images : [images]; 
+
         const newProduct = await Products.create({
           id: uuidv4(),
           title,
           summary,
           price,
           stock,
-          images,
+          images: imagesArray, 
           createdAt: new Date(),
           updatedAt: new Date(),
         });
 
-        // Asociar el producto con categorías
         if (categoryIds && categoryIds.length > 0) {
           const categories = await Category.findAll({
             where: {
@@ -31,7 +31,7 @@ module.exports = {
           await newProduct.addCategories(categories);
         }
 
-        // Asociar el producto con subcategorías
+
         if (subcategoryIds && subcategoryIds.length > 0) {
           const subcategories = await Subcategory.findAll({
             where: {
@@ -49,6 +49,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    // Eliminar datos si es necesario
+
   },
 };
+
