@@ -60,6 +60,11 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    active: {
+      type: DataTypes.BOOLEAN, 
+      allowNull: false,
+      defaultValue: true, 
+    },
   });
 
   return User;

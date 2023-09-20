@@ -61,7 +61,6 @@ function isAdmin(req, res, next) {
       return res.status(403).json({ error: 'Token de autorización no válido' });
     }
 
-    // Verificar si el usuario tiene la propiedad isAdmin y si es true
     if (!decodedToken.isAdmin) {
       return res.status(403).json({ error: 'Acceso no autorizado para usuarios no administradores' });
     }

@@ -23,6 +23,7 @@ const checkout = require('./checkout');
 const createPayment = require('./payment/create_payment');
 const paymentNotification = require('./payment/payment_notification');
 const getPaymentDetails = require('./payment/get_payment_details');
+const toggleActive = require('./softDelete/toggle_active');
 
 module.exports = {
     createProduct,
@@ -49,5 +50,6 @@ module.exports = {
     checkout,
     createPayment,
     paymentNotification,
-    getPaymentDetails
+    getPaymentDetails,
+    toggleActive
 }
