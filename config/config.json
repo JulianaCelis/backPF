@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "Oremonogatari.22",
-    "database": "ecommerce",
-    "host": "localhost",
+    "username": "ecommerce_qa16_user",
+    "password": "X2voTJouCHKfVv7ECUgM4cKR9cD91Tpm",
+    "database": "ecommerce_qa16",
+    "host": "dpg-ck5m5egs0i2c73bddbv0-a",
     "dialect": "postgres"
   },
   "test": {
-    "username": "postgres",
-    "password": "Oremonogatari.22",
-    "database": "ecommerce",
-    "host": "localhost",
+    "username": "ecommerce_qa16_user",
+    "password": "X2voTJouCHKfVv7ECUgM4cKR9cD91Tpm",
+    "database": "ecommerce_qa16",
+    "host": "dpg-ck5m5egs0i2c73bddbv0-a",
     "dialect": "postgres"
   },
   "production": {
-    "username": "postgres",
-    "password": "Oremonogatari.22",
-    "database": "ecommerce",
-    "host": "localhost",
+    "username": "ecommerce_qa16_user",
+    "password": "X2voTJouCHKfVv7ECUgM4cKR9cD91Tpm",
+    "database": "ecommerce_qa16",
+    "host": "dpg-ck5m5egs0i2c73bddbv0-a",
     "dialect": "postgres"
   }
 }
