@@ -28,7 +28,10 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 
-const { Products, User, Order, Category, Review, ShippingAddress, Subcategory} = sequelize.models;
+
+const { Products, User, Order, Category, Reviews, ShippingAddress, Subcategory, OrderItem, Cart} = sequelize.models;
+
+
 
 // Relación entre Producto y Categoría (muchos a muchos)
 Products.belongsToMany(Category, { through: 'ProductCategory' });
@@ -43,17 +46,17 @@ Products.belongsToMany(Subcategory, { through: 'ProductSubcategory' });
 Subcategory.belongsToMany(Products, { through: 'ProductSubcategory' });
 
 // Asociaciones de Review y Product
-Review.belongsTo(Products);
-Products.hasMany(Review);
+Reviews.belongsTo(Products, { foreignKey: 'productId' });
+Products.hasMany(Reviews, { foreignKey: 'productId' });
 
 // Asociaciones de Review y User
-Review.belongsTo(User);
-User.hasMany(Review);
+
+Reviews.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Reviews, { foreignKey: 'userId' });
 
 // Asociaciones de Order y User
-Order.belongsTo(User);
-//agregar foreignKey
-User.hasMany(Order);
+User.hasMany(Order, { foreignKey: 'userId' });
+Order.belongsTo(User, { foreignKey: 'userId' });
 
 // Asociaciones de Product y User para usuarios que pueden subir productos
 User.hasMany(Products, {
@@ -75,6 +78,18 @@ User.hasMany(ShippingAddress, {
   as: 'shippingAddresses',
   foreignKey: 'userId', 
 });
+
+// Asociaciones de Order y OrderItem
+// Order.hasMany(OrderItem, { foreignKey: 'orderId' });
+// OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
+
+// // Asociaciones de Product y OrderItem
+// Products.hasMany(OrderItem, { foreignKey: 'productId' });
+// OrderItem.belongsTo(Product, { foreignKey: 'productId' });
+
+// // Asociaciones de Cart
+// Cart.belongsTo(User, { foreignKey: 'userId' });
+// Cart.belongsTo(Products, { foreignKey: 'productId' });
 
 module.exports = {
   ...sequelize.models,

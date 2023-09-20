@@ -2,7 +2,8 @@ const express = require('express');
 const productRouter = express.Router();
 const {getProducts, createProduct, updateProduct, getProductById} = require('../controllers/index');
 const { Products } = require('../db.js');
-const authenticateToken = require('../middlewares/authMiddleware.js');
+const {authenticateToken} = require('../middlewares/authMiddleware.js');
+
 
 
 productRouter.get('/', async (req, res) => {

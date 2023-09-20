@@ -1,16 +1,22 @@
-const Review = require('../models/Review');
+const { Reviews, Products } = require('../db.js');
 
-async function getReviewsByProduct(product) {
+async function getReviewsByProduct(productId) {
   try {
-    const reviews = await Review.findAll({
-      where: {
-        product,
+    const product = await Products.findByPk(productId, {
+      include: {
+        model: Reviews,
+        as: 'reviews',
       },
     });
-    return reviews;
+
+    if (!product) {
+      return { error: 'Producto no encontrado' }; 
+    }
+
+    return product.reviews;
   } catch (error) {
     console.error('Error al obtener las reseñas por producto:', error);
-    return [];
+    return { error: 'Error al obtener las reseñas por producto' };
   }
 }
 

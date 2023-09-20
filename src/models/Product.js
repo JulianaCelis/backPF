@@ -60,6 +60,11 @@ module.exports = (sequelize) => {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
       },
+      active: {
+        type: DataTypes.BOOLEAN, 
+        allowNull: false,
+        defaultValue: true, 
+      },
     },
   );
 };

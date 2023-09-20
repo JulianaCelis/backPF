@@ -1,11 +1,12 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  const Review = sequelize.define('review', {
+  const Reviews = sequelize.define('reviews', {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID, 
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      autoIncrement: true,
+      allowNull: false,
     },
     comment: {
       type: DataTypes.TEXT,
@@ -15,7 +16,12 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    active: {
+      type: DataTypes.BOOLEAN, 
+      allowNull: false,
+      defaultValue: true, 
+    },
   });
 
-  return Review;
+  return Reviews;
 };

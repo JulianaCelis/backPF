@@ -1,21 +1,25 @@
-const Review = require('../models/Review');
+const { Reviews } = require('../db.js');
 
-const deleteReview = async (req, res) => {
+async function deleteReview(req, res) {
   const { id } = req.params;
 
   try {
-    const review = await Review.findByPk(id);
+    // Verifica si la revisión existe
+    const review = await Reviews.findByPk(id);
 
     if (!review) {
-      return res.status(404).json({ error: 'Reseña no encontrada.' });
+      return res.status(404).json({ error: 'Review no encontrada.' });
     }
 
+    // Elimina la revisión
     await review.destroy();
 
-    return res.json({ message: 'Reseña eliminada con éxito.' });
+    console.log('Review eliminada con éxito.');
+    res.status(200).json({ message: 'Review eliminada con éxito.' });
   } catch (error) {
-    return res.status(500).json({ error: 'Error al eliminar la reseña.' });
+    console.error('Error al eliminar la review:', error);
+    res.status(500).json({ error: 'Error al eliminar la review.' });
   }
-};
+}
 
 module.exports = deleteReview;

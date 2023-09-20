@@ -1,0 +1,92 @@
+[
+  {
+    "title": "Printer",
+    "summary": "Great value for money",
+    "price": "2.58",
+    "stock": 14,
+    "images": ["http://dummyimage.com/178x100.png/dddddd/000000"],
+    "categoryIds": ["90303a8c-0844-4fd7-b5fe-8737f4f4a743"],
+    "subcategoryIds": ["82da435d-a164-4fd0-bd52-0dfae2a8d2a8"]
+  },
+  {
+    "title": "Monitor",
+    "summary": "High-quality product",
+    "price": "22.53",
+    "stock": 21,
+    "images": ["http://dummyimage.com/184x100.png/cc0000/ffffff"],
+    "categoryIds": ["d1750781-dde0-4192-bdfa-6389d62dc4be"],
+    "subcategoryIds": ["f2418d42-ff99-4719-91bf-8b128c602879"]
+  },
+  {
+    "title": "Keyboard",
+    "summary": "Great value for money",
+    "price": "19.95",
+    "stock": 86,
+    "images": ["http://dummyimage.com/250x100.png/ff4444/ffffff"],
+    "categoryIds": ["90303a8c-0844-4fd7-b5fe-8737f4f4a743"],
+    "subcategoryIds": ["da1c8f69-1e44-4721-ae99-baf618b560a4"]
+  },
+  {
+    "title": "Desktop",
+    "summary": "Versatile usage",
+    "price": "9.39",
+    "stock": 30,
+    "images": ["http://dummyimage.com/146x100.png/cc0000/ffffff"],
+    "categoryIds": ["d1750781-dde0-4192-bdfa-6389d62dc4be"],
+    "subcategoryIds": ["8abfc981-615d-4320-8080-55bb50bffeb9"]
+  },
+  {
+    "title": "Headphones",
+    "summary": "Stylish design",
+    "price": "10.91",
+    "stock": 94,
+    "images": ["http://dummyimage.com/107x100.png/dddddd/000000"],
+    "categoryIds": ["90303a8c-0844-4fd7-b5fe-8737f4f4a743"],
+    "subcategoryIds": ["8806e695-f9ce-4bab-bd84-612ad85887e8"]
+  },
+  {
+    "title": "Mouse",
+    "summary": "Versatile usage",
+    "price": "0.77",
+    "stock": 61,
+    "images": ["http://dummyimage.com/101x100.png/cc0000/ffffff"],
+    "categoryIds": ["90303a8c-0844-4fd7-b5fe-8737f4f4a743"],
+    "subcategoryIds": ["747f2117-32f9-41df-a291-843464214615"]
+  },
+  {
+    "title": "Scanner",
+    "summary": "High-quality product",
+    "price": "24.55",
+    "stock": 86,
+    "images": ["http://dummyimage.com/214x100.png/5fa2dd/ffffff"],
+    "categoryIds": ["90303a8c-0844-4fd7-b5fe-8737f4f4a743"],
+    "subcategoryIds": ["82da435d-a164-4fd0-bd52-0dfae2a8d2a8"]
+  },
+  {
+    "title": "External Hard Drive",
+    "summary": "Great value for money",
+    "price": "0.39",
+    "stock": 89,
+    "images": ["http://dummyimage.com/188x100.png/ff4444/ffffff"],
+    "categoryIds": ["9fc2ddf5-8d6d-4f6d-8c1c-c6c6075a2710"],
+    "subcategoryIds": ["21bc725f-50d6-419f-86c8-976435a101b5"]
+  },
+  {
+    "title": "External Hard Drive",
+    "summary": "Great value for money",
+    "price": "6.32",
+    "stock": 59,
+    "images": ["http://dummyimage.com/105x100.png/cc0000/ffffff"],
+    "categoryIds": ["9fc2ddf5-8d6d-4f6d-8c1c-c6c6075a2710"],
+    "subcategoryIds": ["21bc725f-50d6-419f-86c8-976435a101b5"]
+  },
+  {
+    "title": "Monitor",
+    "summary": "High-quality product",
+    "price": "13.53",
+    "stock": 74,
+    "images": ["http://dummyimage.com/236x100.png/ff4444/ffffff"],
+    "categoryIds": ["d1750781-dde0-4192-bdfa-6389d62dc4be"],
+    "subcategoryIds": ["f2418d42-ff99-4719-91bf-8b128c602879"]
+  }
+]

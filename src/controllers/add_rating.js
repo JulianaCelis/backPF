@@ -7,7 +7,6 @@ async function addRating(reviewId, rating) {
       throw new Error('Reseña no encontrada');
     }
 
-    // Actualiza la calificación de la reseña
     review.rating = rating;
     await review.save();
 

@@ -5,37 +5,37 @@ const { isURL } = require('validator');
 const storage = multer.memoryStorage();
 const upload = multer({ storage, limits: { fileSize: 1024 * 1024 * 5 } });
 
-// Expresión regular para verificar si una URL termina en una extensión de archivo de imagen
 const imageFileExtensions = /\.(jpg|jpeg|png|gif|bmp)$/i;
 
 async function createProduct(req, res) {
   try {
-    const { title, summary, price, stock, image, externalImageLink, categoryIds, subcategoryIds } = req.body;
+    const { title, summary, price, stock, images, categoryIds, subcategoryIds } = req.body;
 
-    let imageBuffer = null;
+    let imagesArray = null;
 
     if (req.file) {
       if (req.file.size > 1024 * 1024 * 5) {
         return res.status(400).json({ error: 'La imagen es demasiado grande. El tamaño máximo permitido es de 5 MB.' });
       }
 
-      imageBuffer = req.file.buffer;
-    } else if (externalImageLink) {
-      if (!isURL(externalImageLink)) {
-        return res.status(400).json({ error: 'El enlace proporcionado no es una URL válida.' });
-      }
-
-      // Verifica si la URL apunta a una imagen
-      if (!imageFileExtensions.test(externalImageLink)) {
-        return res.status(400).json({ error: 'El enlace proporcionado no apunta a una imagen válida.' });
-      }
+      imagesArray = [req.file.buffer.toString('base64')];
     }
 
-    // Crea el producto primero
+    if (images && typeof images === 'string') {
+      if (!isURL(images)) {
+        return res.status(400).json({ error: 'El enlace proporcionado en "images" no es una URL válida.' });
+      }
+
+      if (!imageFileExtensions.test(images)) {
+        return res.status(400).json({ error: 'El enlace proporcionado en "images" no apunta a una imagen válida.' });
+      }
+
+      imagesArray = [images];
+    }
+
     const newProduct = await Products.create({
       title,
-      image: imageBuffer,
-      externalImageLink,
+      images: imagesArray,
       summary,
       price,
       stock,
@@ -43,8 +43,8 @@ async function createProduct(req, res) {
 
     await newProduct.addCategories(categoryIds);
     await newProduct.addSubcategories(subcategoryIds);
-    console.log("este es el req user",req.user)
-    // Agrega la relación entre el usuario y el producto
+    console.log("este es el req user", req.user)
+
     await newProduct.setUser(req.user.id);
 
     return res.status(201).json(newProduct);
@@ -53,6 +53,6 @@ async function createProduct(req, res) {
     res.status(500).json({ error: 'Error al crear el producto' });
   }
 }
-
 module.exports = createProduct;
+
 
