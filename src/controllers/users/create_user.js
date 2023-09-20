@@ -16,7 +16,8 @@ async function registerUser(req, res) {
       isSeller, 
       wantsNotification, 
       storeName, 
-      googleProfile
+      googleProfile,
+      isAdmin
      } = req.body;
 
     if (!addressData || 
@@ -36,7 +37,6 @@ async function registerUser(req, res) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-
     const newUser = await User.create({
       username,
       email,
@@ -47,12 +47,13 @@ async function registerUser(req, res) {
       isSeller,
       wantsNotification,
       storeName: isSeller ? storeName : null,
+      isAdmin: isAdmin || false,
     });
-
 
     const tokenPayload = {
       userId: newUser.id,
       isSeller,
+      isAdmin: isAdmin || false,
     };
 
     if (googleProfile) {
@@ -82,3 +83,4 @@ async function registerUser(req, res) {
 }
 
 module.exports = registerUser;
+
