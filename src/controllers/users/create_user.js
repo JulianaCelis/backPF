@@ -1,6 +1,7 @@
 const { User, ShippingAddress } = require('../../db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const sgMail = require('../sendgridConfig'); 
 require('dotenv').config();
 
 async function registerUser(req, res) {
@@ -74,6 +75,20 @@ async function registerUser(req, res) {
       country: addressData.country,
       userId: newUser.id, 
     });
+
+    const msg = {
+      to: email, 
+      from: 'grtechpf@gmail.com', 
+      subject: 'Bienvenido a GRTECH',
+      text: '¡Gracias por unirte a nuestra aplicación!',
+      html: '<strong>¡Gracias por unirte a nuestra aplicación!</strong>',
+    };
+
+    sgMail.send(msg)
+      .then(() => console.log('Correo electrónico de bienvenida enviado'))
+      .catch((error) => console.error('Error al enviar el correo electrónico de bienvenida', error));
+
+
 
     return res.status(201).json({ message: 'Usuario registrado exitosamente', token });
   } catch (error) {
