@@ -1,8 +1,14 @@
+const mercadopago = require('mercadopago');
+require('dotenv').config(); 
 const express = require('express');
 const paymentRouter = express.Router();
-const {createPayment,paymentNotification,getPaymentDetails} = require('../controllers/index');
+const {paymentNotification,getPaymentDetails} = require('../controllers/index');
+const mercadopagoController = require('../controllers/payment/create_payment');
 
-paymentRouter.post('/', createPayment);
+
+const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN;
+
+paymentRouter.post('/', mercadopagoController.createPreference);
 paymentRouter.post('/notification', paymentNotification);
 paymentRouter.get('/:paymentId', getPaymentDetails);
 

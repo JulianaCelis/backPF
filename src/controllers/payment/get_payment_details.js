@@ -1,22 +1,23 @@
 const mercadopago = require('mercadopago');
 
-// Configura las credenciales de MercadoPago
 mercadopago.configure({
   access_token: 'TEST-4086619519079692-090811-73f613aa17204f1c1db33b3f4784dd55-70067064',
 });
-
-const getPaymentDetails = async (req, res) => {
+const getPaymentDetails = (req, res) => {
   try {
-    const paymentId = req.params.paymentId;
+    const data = req.body;
 
-    // Consulta los detalles del pago directamente desde MercadoPago
-    const paymentDetails = await mercadopago.payment.get(paymentId);
+    if (data && data.id) {
+      console.log('Notificación de pago recibida:', data);
 
-    // Devuelve los detalles del pago como respuesta
-    res.status(200).json(paymentDetails);
+      res.status(200).send('OK');
+    } else {
+      console.error('Notificación de pago inválida:', data);
+      res.status(400).send('Invalid notification data');
+    }
   } catch (error) {
-    console.error('Error al obtener detalles del pago desde MercadoPago:', error);
-    res.status(500).json({ error: 'Error al obtener detalles del pago.' });
+    console.error('Error al manejar notificación de pago:', error);
+    res.status(500).send('Error handling payment notification');
   }
 };
 

@@ -20,7 +20,7 @@ const addToTempCart = require('./cartTempController/cart_temp_add');
 const removeFromCart = require('./cartController/cart_remove');
 const removeFromTempCart = require('./cartTempController/cart_temp_remove');
 const checkout = require('./checkout');
-const createPayment = require('./payment/create_payment');
+// const createPayment = require('./payment/create_payment');
 const paymentNotification = require('./payment/payment_notification');
 const getPaymentDetails = require('./payment/get_payment_details');
 const toggleActive = require('./softDelete/toggle_active');
@@ -48,7 +48,7 @@ module.exports = {
     removeFromCart,
     removeFromTempCart,
     checkout,
-    createPayment,
+    // createPayment,
     paymentNotification,
     getPaymentDetails,
     toggleActive
