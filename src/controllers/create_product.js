@@ -9,7 +9,7 @@ const imageFileExtensions = /\.(jpg|jpeg|png|gif|bmp)$/i;
 
 async function createProduct(req, res) {
   try {
-    const { title, summary, price, stock, images, categoryIds, subcategoryIds } = req.body;
+    const { title, summary, price, stock, images, categoryId, subcategoryId } = req.body;
 
     let imagesArray = null;
 
@@ -35,17 +35,23 @@ async function createProduct(req, res) {
 
     const newProduct = await Products.create({
       title,
-      images: imagesArray,
       summary,
       price,
       stock,
+      images: imagesArray,
+      categoryId, 
+      subcategoryId, 
     });
 
-    await newProduct.addCategories(categoryIds);
-    await newProduct.addSubcategories(subcategoryIds);
-    console.log("este es el req user", req.user)
+    await newProduct.setCategory(categoryId);
+    await newProduct.setSubcategory(subcategoryId);
 
-    await newProduct.setUser(req.user.id);
+    console.log("este es el req user", req.user);
+
+   
+    if (req.user) {
+      await newProduct.setUser(req.user.id);
+    }
 
     return res.status(201).json(newProduct);
   } catch (error) {
@@ -53,6 +59,5 @@ async function createProduct(req, res) {
     res.status(500).json({ error: 'Error al crear el producto' });
   }
 }
+
 module.exports = createProduct;
-
-

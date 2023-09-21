@@ -1,27 +1,36 @@
 const mercadopago = require('mercadopago');
+const Productss = require('../../db'); 
+const dotenv = require('dotenv');
+
+dotenv.config(); // Cargar las variables de entorno desde .env
 
 mercadopago.configure({
-  access_token: 'TEST-4086619519079692-090811-73f613aa17204f1c1db33b3f4784dd55-70067064',
+  access_token: process.env.MERCADOPAGO_ACCESS_TOKEN,
 });
 
 const PaymentNotification = async (req, res) => {
   try {
-   
     const paymentId = req.query.id;
 
     const paymentInfo = await mercadopago.payment.get(paymentId);
 
     if (paymentInfo.body.status === 'approved') {
-      // El pago fue aprobado, actualiza el estado del pedido en tu sistema
-      // ...
 
-     
+      const productIdsInOrder = paymentInfo.body.order.order_items.map(item => item.id);
+
+      for (const productId of productIdsInOrder) {
+        const product = await Products.findById(productId);
+
+        if (product) {
+          product.quantity -= 1;
+
+          await product.save();
+        }
+      }
+
       res.sendStatus(200);
     } else {
-      // El pago no fue aprobado, toma acciones según tu lógica de negocio
-      // ...
 
-      // Envía una respuesta exitosa a MercadoPago para confirmar la recepción de la notificación
       res.sendStatus(200);
     }
   } catch (error) {
@@ -31,4 +40,5 @@ const PaymentNotification = async (req, res) => {
   }
 };
 
-module.exports = PaymentNotification
+module.exports = PaymentNotification;
+

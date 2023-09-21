@@ -1,33 +1,32 @@
 const mercadopago = require('mercadopago');
 
 mercadopago.configure({
-  access_token: 'TEST-4086619519079692-090811-73f613aa17204f1c1db33b3f4784dd55-70067064',
+  access_token: 'TU_ACCESS_TOKEN', // Reemplaza con tu Access Token de MercadoPago
 });
 
-const createPayment = async (items, returnUrl, userId) => {
-  try {
-    const preference = {
-      items: items.map((item) => ({
-        title: item.name,
-        unit_price: item.price,
-        quantity: item.quantity,
-      })),
-      external_reference: userId,
-      back_urls: {
-        success: returnUrl,
-        failure: returnUrl,
-        pending: returnUrl,
-      },
-    };
+exports.createPreference = (req, res) => {
+  // Obtén los datos de los items del cuerpo de la solicitud
+  const { items } = req.body;
 
-    const response = await mercadopago.preferences.create(preference);
-    const initPoint = response.body.init_point;
-
-    return initPoint;
-  } catch (error) {
-    console.error('Error al crear el pago con MercadoPago:', error);
-    throw error;
+  // Verifica que se hayan proporcionado los datos de los items
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: 'Datos de los items no proporcionados o inválidos' });
   }
+
+  // Crea la preferencia de pago con los datos de los items proporcionados
+  const preference = {
+    items: items,
+  };
+
+  mercadopago.preferences.create(preference)
+    .then((response) => {
+      res.json({ preference_id: response.body.id });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ error: 'Error al crear la preferencia de pago' });
+    });
 };
 
-module.exports = createPayment
+
+
