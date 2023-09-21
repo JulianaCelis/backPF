@@ -1,41 +1,36 @@
-const { Products, Category, Subcategory, User } = require('../db.js');
+const { Products } = require('../db.js');
 const multer = require('multer');
-const { isURL } = require('validator');
+require('dotenv').config();
+const cloudinary = require('cloudinary').v2;
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage, limits: { fileSize: 1024 * 1024 * 5 } });
-
-const imageFileExtensions = /\.(jpg|jpeg|png|gif|bmp)$/i;
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 async function createProduct(req, res) {
   try {
-    const { title, summary, price, stock, images, categoryIds, subcategoryIds } = req.body;
+    const { title, summary, price, stock, categoryIds, subcategoryIds } = req.body;
+    let imageUrls = [];
 
-    let imagesArray = null;
+    if (req.files && req.files.images) {
+      const images = Array.isArray(req.files.images) ? req.files.images : [req.files.images];
 
-    if (req.file) {
-      if (req.file.size > 1024 * 1024 * 5) {
-        return res.status(400).json({ error: 'La imagen es demasiado grande. El tamaño máximo permitido es de 5 MB.' });
+      for (const image of images) {
+        const uploadResponse = await cloudinary.uploader.upload(image.tempFilePath, {
+          folder: 'GRTECH', // Cambia el nombre de la carpeta según tus necesidades
+        });
+
+        if (uploadResponse && uploadResponse.secure_url) {
+          imageUrls.push(uploadResponse.secure_url);
+        }
       }
-
-      imagesArray = [req.file.buffer.toString('base64')];
-    }
-
-    if (images && typeof images === 'string') {
-      if (!isURL(images)) {
-        return res.status(400).json({ error: 'El enlace proporcionado en "images" no es una URL válida.' });
-      }
-
-      if (!imageFileExtensions.test(images)) {
-        return res.status(400).json({ error: 'El enlace proporcionado en "images" no apunta a una imagen válida.' });
-      }
-
-      imagesArray = [images];
     }
 
     const newProduct = await Products.create({
       title,
-      images: imagesArray,
+      images: imageUrls, // Almacena las URLs de las imágenes en el campo "images"
       summary,
       price,
       stock,
@@ -43,9 +38,9 @@ async function createProduct(req, res) {
 
     await newProduct.addCategories(categoryIds);
     await newProduct.addSubcategories(subcategoryIds);
-    console.log("este es el req user", req.user)
 
-    await newProduct.setUser(req.user.id);
+    // Asigna el usuario actual como propietario del producto (reemplaza con tu lógica de autenticación)
+    // Ejemplo: await newProduct.setUser(req.user.id);
 
     return res.status(201).json(newProduct);
   } catch (error) {
@@ -53,6 +48,5 @@ async function createProduct(req, res) {
     res.status(500).json({ error: 'Error al crear el producto' });
   }
 }
+
 module.exports = createProduct;
-
-
